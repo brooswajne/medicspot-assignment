@@ -1,6 +1,8 @@
 # Questions
 
-Qs1: Explain the output of the following code and why
+## Question 1
+
+Explain the output of the following code and why
 
 ```js
     setTimeout(function() {
@@ -9,7 +11,9 @@ Qs1: Explain the output of the following code and why
     console.log("2");
 ```
 
-Qs2: Explain the output of the following code and why
+## Question 2
+
+Explain the output of the following code and why
 
 ```js
     function foo(d) {
@@ -21,7 +25,10 @@ Qs2: Explain the output of the following code and why
     foo(0);
 ```
 
-Qs3: If nothing is provided to `foo` we want the default response to be `5`. Explain the potential issue with the following code:
+## Question 3
+
+If nothing is provided to `foo` we want the default response to be `5`.
+Explain the potential issue with the following code:
 
 ```js
     function foo(d) {
@@ -30,7 +37,9 @@ Qs3: If nothing is provided to `foo` we want the default response to be `5`. Exp
     }
 ```
 
-Qs4: Explain the output of the following code and why
+## Question 4
+
+Explain the output of the following code and why
 
 ```js
     function foo(a) {
@@ -42,7 +51,9 @@ Qs4: Explain the output of the following code and why
     console.log(bar(2))
 ```
 
-Qs5: Explain how the following function would be used
+## Question 5
+
+Explain how the following function would be used
 
 ```js
     function double(a, done) {
