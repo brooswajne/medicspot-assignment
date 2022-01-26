@@ -12,8 +12,8 @@ Explain the output of the following code and why
 ```
 
 Running the above code will result in `2` being logged immediately (± some CPU
-cycles), then after 100ms `1` will be logged to the console
-.
+cycles), then after 100ms `1` will be logged to the console.
+
 This is because of how setTimeout works - the provided callback function gets
 scheduled to be run 100ms after the initial setTimeout call, then the next line
 of code logs `2`, then the JS event loop keeps running until 100ms has elapsed
