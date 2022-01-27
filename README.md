@@ -1,98 +1,42 @@
 # Node code challenge
 
-This challenge has three parts:
-
-1. Written answers to [Questions](./QUESTIONS.md)
-2. Build a geo search server
-3. Build a form to search and display results
-
-We're looking for elegant, clean solutions.  Try to think of and handle possible edge cases.
-
-This challenge is sent to experienced developers and newcomers alike. The aim is to complete the task to the point at which you are comfortable talking about it.  In the interview we'll discuss approach to the problem, why you chose the given approach and where you would take it next.
-
-There are [hints](./HINTS.md) available should you get stuck.
-
 ## Part 1: Questions
 
-The goal here is to describe as clearly and tersely as possible. As much an assessment of communications as JavaScript knowledge.
+See [`QUESTIONS.md`](./QUESTIONS.md).
 
-## Part 2: The geo search server
+## Part 2: The Server
 
-The objective is to create a server which can be queried for names of points of interest in the UK.
+### Dependencies
 
-For a given input such as `hastin` a set of matching results should be returned which start with this input.
+These are the dependencies I'm using and the reasoning behind their choice.
 
-Specification:
+- `express`: Simplifies the task of creating a web server slightly - for the
+  for the purpose of this assignment (just a single static route) it's probably
+  more than is needed (this could all just be done with node's built-in `http`
+  and `querystring` modules) but it makes it much easier to add new routing and
+  functionality in the future.
 
-The server should respond to the following route
+- `better-sqlite3`: I've not used SQLite before, but the two packages that came
+  up when looking for a library to interact with a SQLite database from node.js
+  were this one and [`node-sqlite3`](https://github.com/mapbox/node-sqlite3).  \
+  The latter is definitely being developed by a bigger company (mapbox) which
+  helps feel confident about its stability, but `better-sqlite3` seems to be
+  actively developed with over 100k weekly downloads and makes some convincing
+  promises about speed and simplicity - the examples make it look a lot nicer to
+  use.  \
+  Neither has many sub-dependencies making them pretty self-contained
+  dependencies and the choice between the two relatively safe.
 
-    /locations?q=fuzzyMatchString
+- `@brooswajne/terrier`: This is just a super-simple logger which I made for fun
+  a while back ([source](https://github.com/brooswajne/terrier)). I just like
+  how it looks and how it works, and it's nice to use it somewhere.  \
+  It has no dependencies, and since I made it I know exactly how it works and
+  can be more confident that it doesn't introduce vulnerabilities in code I
+  might not have fully audited.
 
-Where `fuzzyMatchString` will be a partial name of a location where the start of the name matches. For example
+If there are any questions about the dev-dependencies (used for linting /
+type-checking / testing) I'd be happy to discuss those too.
 
-    /locations?q=hastin
+## Part 3: The App
 
-Could return a the following JSON response (NOTE: Your dataset only contains GB locations, so the results will differ)
-
-    [
-      "Hastings Castle",
-      "Hastings Slieve Donard Hotel",
-      "Hastings Everglades Hotel",
-      "Hastings Railway Station",
-      "Hastings Culloden Estate",
-      "Hastings Europa Hotel",
-      "Hastings District",
-      "Hastingleigh",
-      "Hastingwood",
-      "Hastings Stormont",
-      "Hastings Ballygally Castle Hotel",
-      "Hastings Culloden Estate & Spa",
-      "Hastings Slieve Donard Resort And Spa"
-    ]
-
-NOTE: You should only start fuzzy matches if 2 or more characters are in the search string.
-
-Implementation:
-
-You can use whatever server library you like but it must be written in [node](https://nodejs.org). The data of the locations should be stored in a [SQLite](https://www.sqlite.org/) database.
-
-Data source:
-
-The data source is available in this repo in the [./data/GB.txt](data/) file. The [readme](data/readme.txt) in that directory explains how to use the data.
-
-## Part 3: The search form
-
-The objective is to provide a user interface to search for names.
-
-The interface should comprise of a search box and list of results.
-
-When the user starts typing the results should be displayed in the list below.
-
-```
-   [ Search here     ]
-
-   * Result 1
-   * Result 2
-   * Result 3
-   * Result 4
-
-```
-
-NOTE: It is important to display the correct results for a given search term.
-
-Implementation:
-
-The implementation should be a single page app and use [React JS](https://reactjs.org/). The style of react, supporting tools and libraries are up to you.
-
-## Rules
-
-All work should be committed into a fork of this repo. Please note you won't have permission to push to this repo directly (see <https://help.github.com/articles/fork-a-repo> for help)
-
-You'll get bonus points if you
-
-* Display coordinates next to results
-* Unit test your code
-* Provide good documentation
-* Sort the results by the closest name match
-
-Good luck!
+TODO

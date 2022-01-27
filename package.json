@@ -1,20 +1,19 @@
 {
   "name": "code-challenge",
-  "version": "1.0.0",
-  "description": "This challenge has three parts:",
+  "author": "Willem Garnier <willem.garnier@gmail.com>",
+  "description": "Basic geolocation-searching app.",
+
+  "type": "module",
   "private": true,
-  "main": "index.js",
+  "license": "ISC",
+
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@gitlab.com/medicspot/node-code-challenge.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://gitlab.com/medicspot/node-code-challenge/issues"
-  },
-  "homepage": "https://gitlab.com/medicspot/node-code-challenge#readme"
+
+  "dependencies": {
+    "@brooswajne/terrier": "^0.0.1",
+    "better-sqlite3": "^7.5.0",
+    "express": "^4.17.2"
+  }
 }
