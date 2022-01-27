@@ -6,6 +6,11 @@ See [`QUESTIONS.md`](./QUESTIONS.md).
 
 ## Part 2: The Server
 
+The server can be started using `node server.js`, or just `npm run start`.
+
+Configuring the server's behaviour is currently done using environment
+variables, all of these are defined in [`server/config.js`](./server/config.js).
+
 ### Dependencies
 
 These are the dependencies I'm using and the reasoning behind their choice.
