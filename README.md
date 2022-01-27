@@ -42,6 +42,13 @@ These are the dependencies I'm using and the reasoning behind their choice.
 If there are any questions about the dev-dependencies (used for linting /
 type-checking / testing) I'd be happy to discuss those too.
 
+### Tooling
+
+Linting can be run using the `npm run lint` script.
+
+Type-checking is done using TypeScript within JSDoc comments for speed of
+development, and can be run using the `npm run check` script.
+
 ## Part 3: The App
 
 TODO
