@@ -150,16 +150,19 @@ These are the dependencies I'm using and the reasoning behind their choice.
   and `querystring` modules) but it makes it much easier to add new routing and
   functionality in the future.
 
-- `better-sqlite3`: I've not used SQLite before, but the two packages that came
-  up when looking for a library to interact with a SQLite database from node.js
-  were this one and [`node-sqlite3`](https://github.com/mapbox/node-sqlite3).  \
-  The latter is definitely being developed by a bigger company (mapbox) which
-  helps feel confident about its stability, but `better-sqlite3` seems to be
-  actively developed with over 100k weekly downloads and makes some convincing
-  promises about speed and simplicity - the examples make it look a lot nicer to
-  use.  \
+- `sqlite3`: I've not used SQLite before, but the two packages that came up 
+  when looking for a library to interact with a SQLite database from node.js
+  were this one and
+  [`better-sqlite3`](https://github.com/JoshuaWise/better-sqlite3).  \
   Neither has many sub-dependencies making them pretty self-contained
-  dependencies and the choice between the two relatively safe.
+  dependencies and the choice between the two relatively safe.  \
+  The major advantage which this package has which resulted in me picking it
+  over `better-sqlite3` is that its queries are run asynchronously, which is an
+  important feature for a web server to avoid blocking the main thread and
+  stalling all incoming requests.
+
+- `sql-template-strings`: An very small package with no sub-dependencies which
+  just serves to make creating safe SQL queries simpler (and safer).
 
 - `@brooswajne/terrier`: This is just a super-simple logger which I made for fun
   a while back ([source](https://github.com/brooswajne/terrier)). I just like
