@@ -181,6 +181,22 @@ Linting can be run using the `npm run lint` script.
 Type-checking is done using TypeScript within JSDoc comments for speed of
 development, and can be run using the `npm run check` script.
 
+### Routing
+
+I'm a big fan of file-based routing, similar to what modern front-end frameworks
+such as [SvelteKit](https://kit.svelte.dev/docs#routing) and
+[Next.js](https://nextjs.org/docs/routing/introduction) use. In my opinion, it's
+an intuitive way to organise your files which inherently forces you to consider
+which pieces of functionality and which routes belong together.
+
+It's **extremely** overkill for this basic server with just a single route, but
+I'd recently implemented this functionality for another project so was able to
+just re-use the code for it to save time.  \
+It does make writing endpoints a lot more ergonomic and much easier to unit test
+in my opinion as the endpoint handlers can just be promise-returning functions,
+and you could argue that it helps with future-proofing the app a bit for when we
+start adding more endpoints in the future.
+
 ## Part 3: The App
 
 TODO

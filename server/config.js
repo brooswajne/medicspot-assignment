@@ -15,6 +15,10 @@ const DIR_ROOT = join(DIR_HERE, "../");
 export const PORT = Number(process.env.MEDICSPOT_PORT)
 	|| DEFAULT_PORT;
 
+/** @type {string} The directory containing all API routes. */
+export const DIR_ROUTES = process.env.MEDICSPOT_ROUTES
+	|| join(DIR_HERE, "./routes");
+
 /** @type {LoggerLevel} The level of logging to be included. */
 export const LOGGER_LEVEL = Number(process.env.MEDICSPOT_LOGGER_LEVEL)
 	|| LoggerLevel.Info;

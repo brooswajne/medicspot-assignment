@@ -2,6 +2,8 @@ import { createServer } from "http";
 
 import express from "express";
 
+import { createFileBasedRouter } from "./routing.js";
+import { defaultErrorHandler } from "./errors.js";
 import { logger } from "./logger.js";
 
 /**
@@ -9,13 +11,22 @@ import { logger } from "./logger.js";
  * @param {object} settings
  * @param {number} settings.port
  * The port to serve the application on.
+ * @param {string} settings.routes
+ * The directory containing all application API routes to be dynamically
+ * loaded.
  */
-export function createApplication({ port }) {
+export async function createApplication({ port, routes }) {
 	logger.info("Creating application...");
 
 	const app = express( );
 
+	logger.debug("Initialising application routes...");
+	const router = await createFileBasedRouter(routes);
+	app.use(router);
+
+	logger.debug("Initialising manual application routes...");
 	app.get("/", (_, res) => res.send("Hello world!"));
+	app.use(defaultErrorHandler);
 
 	// TODO: support https
 	const server = createServer(app);
