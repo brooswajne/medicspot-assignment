@@ -20,8 +20,9 @@ export const DIR_ROUTES = process.env.MEDICSPOT_ROUTES
 	|| join(DIR_HERE, "./routes");
 
 /** @type {LoggerLevel} The level of logging to be included. */
-export const LOGGER_LEVEL = Number(process.env.MEDICSPOT_LOGGER_LEVEL)
-	|| LoggerLevel.Info;
+export const LOGGER_LEVEL = process.env.MEDICSPOT_LOGGER_LEVEL
+	? Number(process.env.MEDICSPOT_LOGGER_LEVEL)
+	: LoggerLevel.Info;
 
 /** @type {string} The database to be used by the application. */
 export const DB_PATH = process.env.MEDICSPOT_DB_PATH
