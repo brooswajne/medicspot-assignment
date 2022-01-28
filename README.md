@@ -61,6 +61,85 @@ CREATE TABLE locations(
 This issue was fixed by running `sed -i.bak '1s/admin3_code
 admin4_code/admin3_code\tadmin4_code/' ./data/GB.tsv`.
 
+There were still some issues flagged by `sqlite3` when importing the data:
+
+```console
+sqlite> .import ./data/GB.tsv locations
+./data/GB.tsv:1812: unescaped " character
+./data/GB.tsv:1821: unescaped " character
+./data/GB.tsv:1870: unescaped " character
+./data/GB.tsv:1919: unescaped " character
+./data/GB.tsv:1952: unescaped " character
+./data/GB.tsv:2011: unescaped " character
+./data/GB.tsv:3442: unescaped " character
+./data/GB.tsv:5355: unescaped " character
+./data/GB.tsv:6998: unescaped " character
+./data/GB.tsv:7731: unescaped " character
+./data/GB.tsv:12556: unescaped " character
+./data/GB.tsv:19008: unescaped " character
+./data/GB.tsv:20756: unescaped " character
+./data/GB.tsv:25812: unescaped " character
+./data/GB.tsv:1811: expected 19 columns but found 21 - extras ignored
+```
+
+From looking at these lines, all of them except for 25812 seemed to be due to
+some form of encoding issue having caused a character (I think probably some
+form of `ü` going by the location names) in the `alertnatenames` field to turn
+into `"`:
+
+```console
+$ nl ./data/GB.tsv \
+$   | sed -n '1p; 1811,1812p; 1821p; 1870p; 1919p; 1952p; 2011p; 3442p; 5355p; 6998p; 7731p; 12556p; 19008p; 20756p; 25812p;'
+$   | awk -F'\t' '{ print "["$1" ] "$4": "$5 }'
+[     1 ] asciiname: alternatenames
+[  1811 ] Uxbridge: "ksbridzh,aksabrija,wu ke si qiao,Ъксбридж,अक्सब्रिज,烏克斯橋
+[  1812 ] Uttoxeter: "ksutur,Ъксътър
+[  1821 ] Usk: "sk,Ask,Brynbuga,Usk,Аск,Ъск
+[  1870 ] Uppingham: "pingam,Ъпингам
+[  1919 ] Upminster: "pminstur,Ъпминстър
+[  1955 ] Ulverston: "lvurstun,Ulverston,Ulverstone,Ълвърстън
+[  2014 ] Uckfield: "kfijld,Ъкфийлд
+...
+[ 25817 ] Ringmer "The Motte":
+```
+
+(25817 seems to be a location name with actual quotes in it).
+
+It'd be worth figuring out what the mis-encoded character is meant to be, but
+for the time being I just fixed the issue by properly escaping all quote
+characters using `sed -E -i.bak 's/"/""/g; s/[^ ]+/"&"/g' ./data/GB.tsv`.
+
+The data could then be imported with no issues.
+
+Note that the types of some of the fields should really be updated to be more
+accurate (eg. `latitude`/`longitude` should be numeric), but since that is
+irrelevant to this assignment I didn't spend extra time on it:
+
+```console
+sqlite> .schema locations
+CREATE TABLE locations(
+  "geonameid" TEXT,
+  "name" TEXT,
+  "asciiname" TEXT,
+  "alternatenames" TEXT,
+  "latitude" TEXT,
+  "longitude" TEXT,
+  "feature_class" TEXT,
+  "feature_code" TEXT,
+  "country_code" TEXT,
+  "cc2" TEXT,
+  "admin1_code" TEXT,
+  "admin2_code" TEXT,
+  "admin3_code" TEXT,
+  "admin4_code" TEXT,
+  "population" TEXT,
+  "elevation" TEXT,
+  "dem" TEXT,
+  "timezone" TEXT,
+  "modification_date" TEXT
+);
+```
+
 ### Dependencies
 
 These are the dependencies I'm using and the reasoning behind their choice.
