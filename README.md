@@ -11,6 +11,56 @@ The server can be started using `node server.js`, or just `npm run start`.
 Configuring the server's behaviour is currently done using environment
 variables, all of these are defined in [`server/config.js`](./server/config.js).
 
+### Database
+
+There seem to be some issues with the GB.tsv data which I noticed when importing
+it into a SQLite database.
+I'm not sure if this was intentional to catch me out, but what I immediately
+noticed was that the `modification_date` field had been populated with the
+values of the `timezone` field instead (ie. there was an offset by one):
+
+```console
+sqlite> SELECT DISTINCT(modification_date) FROM locations;
+Asia/Nicosia
+Europe/London
+
+Europe/Dublin
+Europe/Brussels
+Europe/Lisbon
+Europe/Moscow
+```
+
+Looking at the table schema, we can see the source of this mistake: there
+doesn't seem to be a tab separating the `admin3_code` and `admin4_code` column
+headers, meaning that they are accidentally combined:
+
+```console
+sqlite> .schema locations
+CREATE TABLE locations(
+  "geonameid" TEXT,
+  "name" TEXT,
+  "asciiname" TEXT,
+  "alternatenames" TEXT,
+  "latitude" TEXT,
+  "longitude" TEXT,
+  "feature_class" TEXT,
+  "feature_code" TEXT,
+  "country_code" TEXT,
+  "cc2" TEXT,
+  "admin1_code" TEXT,
+  "admin2_code" TEXT,
+  "admin3_code admin4_code" TEXT,
+  "population" TEXT,
+  "elevation" TEXT,
+  "dem" TEXT,
+  "timezone" TEXT,
+  "modification_date" TEXT
+);
+```
+
+This issue was fixed by running `sed -i.bak '1s/admin3_code
+admin4_code/admin3_code\tadmin4_code/' ./data/GB.tsv`.
+
 ### Dependencies
 
 These are the dependencies I'm using and the reasoning behind their choice.
