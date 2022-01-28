@@ -7,20 +7,25 @@ import sqlite3 from "sqlite3";
 import { DB_PATH } from "./config.js";
 import { getChildLoggerFactory } from "./logger.js";
 
-// TODO: this connects to the database immediately, should probably refactor
-//       to only connect when a query is actually being made to avoid needing
-//       to connect to the database during unit tests
-export const database = new sqlite3.Database(DB_PATH);
-
 const getQueryLogger = getChildLoggerFactory("query");
+
+/** @type {sqlite3.Database|null} */
+let database = null; // lazily created once a query is run
 
 /**
  * Runs the given SQL query against the database, returning a promise
  * which resolves to the resulting rows.
  * @param {import("sql-template-strings").SQLStatement} query
+ * @param {object} [options]
+ * @param {sqlite3.Database} [options.database]
+ * The database to run queries against, useful for stubbing in a testing
+ * context.
  * @returns {Promise<unknown[]>}
  */
-export async function query(query) {
+export async function query(query, {
+	// only create the default database the first time it is needed, then re-use it
+	database: db = (database = database ?? new sqlite3.Database(DB_PATH)),
+} = { }) {
 	const logger = getQueryLogger( );
 
 	const { sql, values } = query;
@@ -36,7 +41,7 @@ export async function query(query) {
 		//       https://github.com/mapbox/node-sqlite3/wiki/API#statementgetparam--callback
 		//       however, figuring out how to finalise the statement might be
 		//       weird...
-		database.all(sql, values, function handleQueryResult(err, rows) {
+		db.all(sql, values, function handleQueryResult(err, rows) {
 			logger.debug(`Done in ${Date.now( ) - start}ms`);
 			if (err) {
 				logger.error(err);
