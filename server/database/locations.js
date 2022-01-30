@@ -19,6 +19,9 @@ const DEFAULT_LIMIT = 100;
  * The maximum number of locations to include in the results.
  * @param {number} [options.offset]
  * The offset from which to start finding locations.
+ * @param {(sql: import("sql-template-strings").SQLStatement) => Promise<any[]>} [options.execute]
+ * The function used to execute the SQL query. Useful for stubbing in a test
+ * context.
  *
  * @returns {Promise<any[]>}
  */
@@ -26,6 +29,8 @@ export async function searchLocations(search, {
 	fields = [],
 	limit = DEFAULT_LIMIT,
 	offset = 0,
+	// for dependency injection
+	execute = query,
 } = { }) {
 
 	const likeQuery = `%${search.replace(/%/g, "\\%")}%`;
@@ -42,6 +47,6 @@ export async function searchLocations(search, {
 		.append(sql` LIMIT ${limit}`)
 		.append(sql` OFFSET ${offset}`);
 
-	return query(statement);
+	return execute(statement);
 
 }
