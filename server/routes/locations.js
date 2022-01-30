@@ -6,7 +6,10 @@ import { searchLocations } from "../database/locations.js";
  * Searches for all locations matching the given name.
  * @returns {Promise<string[]>}
  */
-export async function GET(request, { logger }) {
+export async function GET(request, { logger }, {
+	// for dependency injection
+	searchLocationsImpl = searchLocations,
+} = { }) {
 	const {
 		q: search,
 		limit,
@@ -17,7 +20,7 @@ export async function GET(request, { logger }) {
 	if (typeof search !== "string") throw new BadRequestError("Invalid search query");
 
 	logger.debug(`Searching for locations matching query "${search}"`);
-	const locations = await searchLocations(search, {
+	const locations = await searchLocationsImpl(search, {
 		fields: [ "name" ],
 		limit: limit && Number.isInteger(limit) ? Number(limit) : undefined,
 		offset: offset && Number.isInteger(offset) ? Number(offset) : undefined,
