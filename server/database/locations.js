@@ -33,13 +33,14 @@ export async function searchLocations(search, {
 	execute = query,
 } = { }) {
 
-	const likeQuery = `%${search.replace(/%/g, "\\%")}%`;
+	const searchTermEscaped = search.replace(/%/g, "\\%");
+	const searchTermForLike = `${searchTermEscaped}%`;
 	const statement = sql``
 		// TODO: this is vulnerable to SQL injection if `fields` was to come
 		//       from user input (which it isn't in our case luckily)
 		.append(`SELECT ${fields.map((f) => `"${f}"`).join(", ") || "*"}`)
 		.append(` FROM ${DB_TABLE_LOCATIONS} WHERE`)
-		.append(sql` asciiname LIKE ${likeQuery}`)
+		.append(sql` asciiname LIKE ${searchTermForLike}`)
 		// TODO: this is a pretty terrible way of ordering the search results,
 		//       but at least it's deterministic for the offset to be consistent
 		//       better would be to use proper text searching

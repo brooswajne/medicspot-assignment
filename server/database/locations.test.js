@@ -28,7 +28,7 @@ describe("server/database/locations.js", function fileSuite( ) {
                  name ASC
 				LIMIT ? OFFSET ?`));
 			expect(query.values).to.deep.equal([
-				"%search term%",
+				"search term%",
 				100,
 				0,
 			]);
@@ -75,7 +75,7 @@ describe("server/database/locations.js", function fileSuite( ) {
                  name ASC
 				LIMIT ? OFFSET ?`));
 			expect(query.values).to.deep.equal([
-				"%search term%",
+				"search term%",
 				42,
 				10,
 			]);
