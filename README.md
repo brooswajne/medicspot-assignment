@@ -168,6 +168,13 @@ Linting can be run using the `npm run lint` script.
 Type-checking is done using TypeScript within JSDoc comments for speed of
 development, and can be run using the `npm run check` script.
 
+Unit tests can be run using `npm run test:unit`, and API tests can be run using
+`npm run test:api`.  \
+**Important**: you should make sure that you configure which database is being
+used by your application (using environment variables) to avoid the default
+database being used and therefore accidentally overwriting your existing
+locations data.
+
 ### Routing
 
 I'm a big fan of file-based routing, similar to what modern front-end frameworks

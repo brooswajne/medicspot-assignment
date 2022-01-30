@@ -6,6 +6,32 @@ import { query } from "../database.js";
 const DEFAULT_LIMIT = 100;
 
 /**
+ * @typedef {object} Location
+ * TODO: these properties are all currently strings due to the database schema
+ *       just using sqlite defaults and not being fixed up (each column has type
+ *       TEXT...)
+ * @property {string} geonameid
+ * @property {string} name
+ * @property {string} asciiname
+ * @property {string} alternatenames
+ * @property {string} latitude
+ * @property {string} longitude
+ * @property {string} feature_class
+ * @property {string} feature_code
+ * @property {string} country_code
+ * @property {string} cc2
+ * @property {string} admin1_code
+ * @property {string} admin2_code
+ * @property {string} admin3_code
+ * @property {string} admin4_code
+ * @property {string} population
+ * @property {string} elevation
+ * @property {string} dem
+ * @property {string} timezone
+ * @property {string} modification_date
+ */
+
+/**
  * Searches for locations with names matching the given ascii search string.
  *
  * @param {string} search
