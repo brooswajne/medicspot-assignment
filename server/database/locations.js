@@ -37,7 +37,7 @@ export async function searchLocations(search, {
 	const statement = sql``
 		// TODO: this is vulnerable to SQL injection if `fields` was to come
 		//       from user input (which it isn't in our case luckily)
-		.append(`SELECT ${fields.join(", ") || "*"}`)
+		.append(`SELECT ${fields.map((f) => `"${f}"`).join(", ") || "*"}`)
 		.append(` FROM ${DB_TABLE_LOCATIONS} WHERE`)
 		.append(sql` asciiname LIKE ${likeQuery}`)
 		// TODO: this is a pretty terrible way of ordering the search results,
