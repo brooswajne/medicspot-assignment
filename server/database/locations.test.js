@@ -67,18 +67,21 @@ describe("server/database/locations.js", function fileSuite( ) {
 			expect(execute).to.have.callCount(1);
 
 			const [ query ] = execute.getCall(0).args;
-			expect(normalizeWhitespace(query.sql))
-				.to.equal(normalizeWhitespace(`
-				SELECT * FROM locations
-				WHERE asciiname LIKE ?
-				ORDER BY length(name) ASC,
-                 name ASC
-				LIMIT ? OFFSET ?`));
-			expect(query.values).to.deep.equal([
-				"search term%",
-				42,
-				10,
-			]);
+			const [ /* searchTerm */, limit, offset ] = query.values;
+			expect(limit).to.equal(42);
+			expect(offset).to.equal(10);
+		});
+
+		it("should escape wildcards in search terms", async function test( ) {
+			const execute = fake.resolves([ ]);
+
+			await searchLocations("search % term with wild%cards", { execute });
+
+			expect(execute).to.have.callCount(1);
+
+			const [ query ] = execute.getCall(0).args;
+			const [ searchTerm ] = query.values;
+			expect(searchTerm).to.equal("search \\% term with wild\\%cards%");
 		});
 
 	});
