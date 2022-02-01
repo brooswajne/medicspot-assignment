@@ -81,16 +81,19 @@ const STYLE_ERROR = `${STYLE_MESSAGE} text-red-600`;
  * @param {(option: TOption) => string} props.getOptionDescription
  * Given a single option, returns its extended description as it should
  * be displayed to the user.
+ * @param {(option: TOption) => void} props.onOptionSelected
+ * A callback which will be called when an option has been selected by the user.
  */
 export function Autocomplete({
+	getOptionDescription,
+	getOptionId,
+	getOptionName,
 	loadOptions,
 	messageEmpty,
 	messageErrored,
 	messageLoading,
 	messagePlaceholder,
-	getOptionId,
-	getOptionName,
-	getOptionDescription,
+	onOptionSelected,
 }) {
 	const [ isOpen, setIsOpen ] = useState(false);
 	const [ status, setStatus ] = useState(/** @type {AutocompleteStatus} */ ("loading"));
@@ -139,8 +142,7 @@ export function Autocomplete({
 
 	return (
 		<Listbox className="relative" as="div"
-			// eslint-disable-next-line no-alert -- just for fun
-			onChange={(location) => alert(`Selected: ${location}`)}
+			onChange={(option) => onOptionSelected?.(option)}
 			onFocus={( ) => setIsOpen(true)}
 			onBlur={( ) => setIsOpen(false)}>
 			<input type="text"

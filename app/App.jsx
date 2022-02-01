@@ -22,6 +22,9 @@ async function loadOptions(searchTerm, { signal }) {
 		.then((res) => res.json( ));
 }
 
+/** Just used to alert the user to what they selected, for fun. */
+const stringify = (thing) => JSON.stringify(thing, null, 2);
+
 export function App( ) {
 	return (
 		<main className={STYLE_CONTAINER}>
@@ -34,6 +37,8 @@ export function App( ) {
 				getOptionId={(location) => location.geonameid}
 				getOptionName={(location) => location.name}
 				getOptionDescription={(location) => `${location.latitude}, ${location.longitude}`}
+				// eslint-disable-next-line no-alert -- just for fun
+				onOptionSelected={(location) => alert(`You selected: ${stringify(location)}`)}
 			/>
 		</main>
 	);
