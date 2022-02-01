@@ -13,6 +13,7 @@ const STYLE_OPTION = "p-2 rounded"
 	+ " transition hover:bg-white";
 const STYLE_OPTION_NAME = "text-sm";
 const STYLE_OPTION_DESCRIPTION = "text-xs opacity-50";
+const STYLE_OPTION_HIGHLIGHT = "underline text-teal-600 font-bold";
 
 /**
  * A single autocomplete option.
@@ -21,11 +22,26 @@ const STYLE_OPTION_DESCRIPTION = "text-xs opacity-50";
  * @param {TOption} props.option
  * @param {string} props.name
  * @param {string} props.description
+ * @param {[ number, number ]} [props.highlight]
+ * An optional range to highlight within the option's name, to give the
+ * user a visual clue as to why this option is shown.
  */
-function AutocompleteOption({ option, name, description }) {
+function AutocompleteOption({
+	option,
+	name,
+	description,
+	highlight = [ 0, 0 ],
+}) {
+	const preHighlighted = name.slice(0, highlight[ 0 ]);
+	const highlighted = name.slice(highlight[ 0 ], highlight[ 1 ]);
+	const postHighlighted = name.slice(highlight[ 1 ]);
 	return (
 		<Listbox.Option value={option} className={STYLE_OPTION}>
-			<div className={STYLE_OPTION_NAME}>{name}</div>
+			<div className={STYLE_OPTION_NAME}>
+				<span>{preHighlighted}</span>
+				<span className={STYLE_OPTION_HIGHLIGHT}>{highlighted}</span>
+				<span>{postHighlighted}</span>
+			</div>
 			<div className={STYLE_OPTION_DESCRIPTION}>{description}</div>
 		</Listbox.Option>
 	);
@@ -53,16 +69,32 @@ const STYLE_ERROR = `${STYLE_MESSAGE} text-red-600`;
  * @param {LoadOptionsContext} context
  * @returns {Promise<TOption[]>}
  */
+/**
+ * @typedef {object} GetOptionHighlightContext
+ * @property {string} searchTerm
+ * The search term used by the user which resulted in this option being
+ * displayed.
+ */
+/**
+ * @template TOption
+ * @callback GetOptionHighlightFn
+ * @param {TOption} option
+ * @param {GetOptionHighlightContext} context
+ * @returns {[ number, number ]}
+ */
 
 /**
  * A generic autocomplete component used by users to filter down a list
  * of options to find the one they are looking for.
  * @template TOption
+ *
  * @param {object} props
+ *
  * @param {LoadOptionsFn<TOption>} props.loadOptions
  * A function which is called when the user enters a search query, and
  * should resolve to the options which should be displayed to the user
  * for that query.
+ *
  * @param {string} props.messagePlaceholder
  * The text input's placeholder text.
  * @param {string} props.messageLoading
@@ -73,6 +105,7 @@ const STYLE_ERROR = `${STYLE_MESSAGE} text-red-600`;
  * @param {string} props.messageEmpty
  * The message to be shown to the user when the options loaded successfully
  * but none were found matching their query.
+ *
  * @param {(option: TOption) => string} props.getOptionId
  * Given a single option, returns its unique ID to identify it within the
  * autocomplete dropdown.
@@ -81,6 +114,11 @@ const STYLE_ERROR = `${STYLE_MESSAGE} text-red-600`;
  * @param {(option: TOption) => string} props.getOptionDescription
  * Given a single option, returns its extended description as it should
  * be displayed to the user.
+ * @param {GetOptionHighlightFn<TOption>} [props.getOptionHighlight]
+ * An optional function which, given an option being displayed to the user and
+ * the search term which generated that option, returns a range to be highlighted
+ * within the option's name as a visual hint to the user.
+ *
  * @param {(option: TOption) => void} props.onOptionSelected
  * A callback which will be called when an option has been selected by the user.
  */
@@ -88,6 +126,7 @@ export function Autocomplete({
 	getOptionDescription,
 	getOptionId,
 	getOptionName,
+	getOptionHighlight,
 	loadOptions,
 	messageEmpty,
 	messageErrored,
@@ -130,7 +169,8 @@ export function Autocomplete({
 			? options.map((option) => (<AutocompleteOption option={option}
 				key={getOptionId(option)}
 				name={getOptionName(option)}
-				description={getOptionDescription(option)}>
+				description={getOptionDescription(option)}
+				highlight={getOptionHighlight?.(option, { searchTerm })}>
 			</AutocompleteOption>))
 			: <span className={STYLE_MESSAGE}>{messageEmpty}</span>;
 		case "loading": return (<span className={STYLE_MESSAGE}>{messageLoading}</span>);

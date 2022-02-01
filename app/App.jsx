@@ -37,6 +37,7 @@ export function App( ) {
 				getOptionId={(location) => location.geonameid}
 				getOptionName={(location) => location.name}
 				getOptionDescription={(location) => `${location.latitude}, ${location.longitude}`}
+				getOptionHighlight={(_, { searchTerm }) => [ 0, searchTerm.length ]}
 				// eslint-disable-next-line no-alert -- just for fun
 				onOptionSelected={(location) => alert(`You selected: ${stringify(location)}`)}
 			/>
