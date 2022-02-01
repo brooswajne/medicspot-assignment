@@ -17,7 +17,9 @@ const STYLE_HEADING = "text-xl text-slate-800 font-bold mb-3";
 
 /** @type {import("./Autocomplete").LoadOptionsFn<LocationOption>} */
 async function loadOptions(searchTerm, { signal }) {
-	return fetch(`/locations?q=${searchTerm}`, { signal })
+	const query = new URLSearchParams( );
+	query.append("q", searchTerm);
+	return fetch(`/locations?${query}`, { signal })
 		// TODO: should really validate that the JSON is actually Array<LocationOption>
 		.then((res) => res.json( ));
 }
