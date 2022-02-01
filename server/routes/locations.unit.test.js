@@ -32,7 +32,7 @@ describe("routes/locations.js", function fileSuite( ) {
 			}, { logger }, { searchLocationsImpl });
 
 			expect(searchLocationsImpl).to.have.been.calledOnceWithExactly("search term", {
-				fields: [ "geonameid", "name" ],
+				fields: [ "geonameid", "name", "latitude", "longitude" ],
 				limit: undefined,
 				offset: undefined,
 			});
@@ -51,7 +51,7 @@ describe("routes/locations.js", function fileSuite( ) {
 			} }, { logger }, { searchLocationsImpl });
 
 			expect(searchLocationsImpl).to.have.been.calledOnceWithExactly("search term", {
-				fields: [ "geonameid", "name" ],
+				fields: [ "geonameid", "name", "latitude", "longitude" ],
 				limit: 322,
 				offset: 15,
 			});
@@ -69,7 +69,7 @@ describe("routes/locations.js", function fileSuite( ) {
 			} }, { logger }, { searchLocationsImpl });
 
 			expect(searchLocationsImpl).to.have.been.calledOnceWithExactly("search term", {
-				fields: [ "geonameid", "name" ],
+				fields: [ "geonameid", "name", "latitude", "longitude" ],
 				limit: undefined,
 				offset: undefined,
 			});

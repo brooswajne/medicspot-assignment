@@ -46,8 +46,8 @@ describe("GET /locations", function endpointSuite( ) {
 			.expect(200);
 
 		expect(body).to.have.deep.members([
-			pick(matchingOne, "geonameid", "name"),
-			pick(matchingTwo, "geonameid", "name"),
+			pick(matchingOne, "geonameid", "name", "latitude", "longitude"),
+			pick(matchingTwo, "geonameid", "name", "latitude", "longitude"),
 		]);
 	});
 

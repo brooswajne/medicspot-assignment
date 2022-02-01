@@ -11,6 +11,8 @@ import { useDebouncedState } from "./utils/hooks.js";
 
 const STYLE_OPTION = "p-2 rounded"
 	+ " transition hover:bg-white";
+const STYLE_OPTION_NAME = "text-sm";
+const STYLE_OPTION_DESCRIPTION = "text-xs opacity-50";
 
 /**
  * A single autocomplete option.
@@ -18,11 +20,13 @@ const STYLE_OPTION = "p-2 rounded"
  * @param {object} props
  * @param {TOption} props.option
  * @param {string} props.name
+ * @param {string} props.description
  */
-function AutocompleteOption({ option, name }) {
+function AutocompleteOption({ option, name, description }) {
 	return (
 		<Listbox.Option value={option} className={STYLE_OPTION}>
-			{name}
+			<div className={STYLE_OPTION_NAME}>{name}</div>
+			<div className={STYLE_OPTION_DESCRIPTION}>{description}</div>
 		</Listbox.Option>
 	);
 }
@@ -74,6 +78,9 @@ const STYLE_ERROR = `${STYLE_MESSAGE} text-red-600`;
  * autocomplete dropdown.
  * @param {(option: TOption) => string} props.getOptionName
  * Given a single option, returns its name to be displayed to the user.
+ * @param {(option: TOption) => string} props.getOptionDescription
+ * Given a single option, returns its extended description as it should
+ * be displayed to the user.
  */
 export function Autocomplete({
 	loadOptions,
@@ -83,6 +90,7 @@ export function Autocomplete({
 	messagePlaceholder,
 	getOptionId,
 	getOptionName,
+	getOptionDescription,
 }) {
 	const [ isOpen, setIsOpen ] = useState(false);
 	const [ status, setStatus ] = useState(/** @type {AutocompleteStatus} */ ("loading"));
@@ -118,7 +126,8 @@ export function Autocomplete({
 		case "loaded": return options.length
 			? options.map((option) => (<AutocompleteOption option={option}
 				key={getOptionId(option)}
-				name={getOptionName(option)}>
+				name={getOptionName(option)}
+				description={getOptionDescription(option)}>
 			</AutocompleteOption>))
 			: <span className={STYLE_MESSAGE}>{messageEmpty}</span>;
 		case "loading": return (<span className={STYLE_MESSAGE}>{messageLoading}</span>);

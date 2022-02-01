@@ -11,6 +11,8 @@ const STYLE_HEADING = "text-xl text-slate-800 font-bold mb-3";
  * @typedef {object} LocationOption
  * @property {string} geonameid
  * @property {string} name
+ * @property {string} latitude
+ * @property {string} longitude
  */
 
 /** @type {import("./Autocomplete").LoadOptionsFn<LocationOption>} */
@@ -31,6 +33,7 @@ export function App( ) {
 				messageEmpty="No matching locations found."
 				getOptionId={(location) => location.geonameid}
 				getOptionName={(location) => location.name}
+				getOptionDescription={(location) => `${location.latitude}, ${location.longitude}`}
 			/>
 		</main>
 	);
