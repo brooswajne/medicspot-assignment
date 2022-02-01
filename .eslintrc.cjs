@@ -5,8 +5,16 @@ module.exports = {
 	extends: [ "@brooswajne" ],
 
 	overrides: [ {
-		files: [ "**/*.test.js" ],
-		extends: [ "@brooswajne/eslint-config/overrides/mocha" ],
+		files: [ "app/**/*" ],
+		env: { browser: true, node: false },
+		parserOptions: { ecmaFeatures: { jsx: true } },
+		extends: [ "@brooswajne", "plugin:react/recommended" ],
+		rules: {
+			// allow PascalCase for components, or otherwise just kebab-case as normal
+			"filename-rules/match": [ "error", /^\w+\.jsx$|^[.a-z-]+$/ ],
+			"react/react-in-jsx-scope": "off",
+			"react/prop-types": "off",
+		},
 	}, {
 		files: [ "server/routes/**/*" ],
 		rules: {
@@ -20,16 +28,8 @@ module.exports = {
 			] } ],
 		},
 	}, {
-		files: [ "app/**/*" ],
-		env: { browser: true, node: false },
-		parserOptions: { ecmaFeatures: { jsx: true } },
-		extends: [ "@brooswajne", "plugin:react/recommended" ],
-		rules: {
-			// allow PascalCase for components, or otherwise just kebab-case as normal
-			"filename-rules/match": [ "error", /^\w+\.jsx$|^[.a-z-]+$/ ],
-			"react/react-in-jsx-scope": "off",
-			"react/prop-types": "off",
-		},
+		files: [ "**/*.test.js" ],
+		extends: [ "@brooswajne/eslint-config/overrides/mocha" ],
 	} ],
 
 };
