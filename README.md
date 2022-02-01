@@ -223,3 +223,12 @@ This is slightly awkward - in a real production app I'd want to either:
   support](https://vitejs.dev/guide/ssr.html) to server-render the app using the
   same server as our API routes, which could therefore also serve the app with
   HMR in a development environment.
+
+**Note**: To achieve the `Display coordinates next to results` "bonus point", I
+changed the `GET /locations` endpoint to return not just an array of string
+location names but also those locations' ids, latitudes and longitudes.  \
+This seems like a sensible change in general to support more use-cases for this
+endpoint rather than restricting ourselves to just responding with names, but
+the commit before that change (a86e9d2) can be checked out to see the
+implementation working when only returning the `name` field of the matching
+locations.
