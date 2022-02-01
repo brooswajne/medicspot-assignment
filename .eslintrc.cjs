@@ -19,6 +19,15 @@ module.exports = {
 				"PUT",
 			] } ],
 		},
+	}, {
+		files: [ "app/**/*" ],
+		env: { browser: true, node: false },
+		parserOptions: { ecmaFeatures: { jsx: true } },
+		extends: [ "@brooswajne", "plugin:react/recommended" ],
+		rules: {
+			// allow PascalCase.tsx, or otherwise just kebab-case as normal
+			"filename-rules/match": [ "error", /^\w+\.jsx$|^[.a-z-]+$/ ],
+		},
 	} ],
 
 };

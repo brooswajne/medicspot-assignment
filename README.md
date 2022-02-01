@@ -193,4 +193,33 @@ start adding more endpoints in the future.
 
 ## Part 3: The App
 
-TODO
+As requested the app is built using ReactJS, and can be found in the
+[`app/`](./app) directory.
+
+The app uses [`vitejs`](https://vitejs.dev/) for bundling, and can be built
+using `npm run build`.  \
+Once that is done, the bundled app will be present in the `dist/` directory
+which will be served statically by the server.
+
+When developing, you can run the `npm run dev` script which will concurrently:
+
+- Start the server, watching for any changes and restarting it when required.
+- Start the app's vitejs dev server, with hot module reloading etc.
+
+To support HMR when developing, we currently run the web app using the built-in
+vitejs dev server. This means that the app will be served over a different port
+to the backend server (defaults to the backend's configured port + 1, but can be
+configured itself - see [`vite.config.js`](./vite.config.js) for the relevant
+environment variable).  \
+I therefore used vitejs's
+[`server.proxy`](https://vitejs.dev/config/#server-proxy) configuration option
+to forward any API requests to the correct port when running the dev server.
+This is slightly awkward - in a real production app I'd want to either:
+
+- Have the production environment be closer to this dev environment, where the
+  app is just served statically by its own process and API requests are made to
+  a remote server (perhaps through an API gateway).
+- Use something like vitejs' built-in [SSR
+  support](https://vitejs.dev/guide/ssr.html) to server-render the app using the
+  same server as our API routes, which could therefore also serve the app with
+  HMR in a development environment.

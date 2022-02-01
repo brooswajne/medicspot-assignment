@@ -2,6 +2,7 @@ import { createServer } from "http";
 
 import express from "express";
 
+import { DIR_APP } from "./config.js";
 import { createFileBasedRouter } from "./routing.js";
 import { defaultErrorHandler } from "./errors.js";
 import { logger } from "./logger.js";
@@ -20,12 +21,15 @@ export async function createApplication({ port, routes }) {
 
 	const app = express( );
 
-	logger.debug("Initialising application routes...");
+	logger.debug("Initialising API routes...");
 	const router = await createFileBasedRouter(routes);
 	app.use(router);
 
-	logger.debug("Initialising manual application routes...");
-	app.get("/", (_, res) => res.send("Hello world!"));
+	logger.debug("Initialising static routes...");
+	logger.trace(`Static files directory: ${DIR_APP}`);
+	app.use(express.static(DIR_APP));
+
+	logger.debug("Initialising fallback routes...");
 	app.use(defaultErrorHandler);
 
 	// TODO: support https
