@@ -36,7 +36,7 @@ const STYLE_OPTIONS = "absolute mt-1"
 	+ " w-full max-h-36 overflow-auto"
 	+ " bg-white/75 backdrop-blur-sm"
 	+ " rounded shadow-md";
-const STYLE_MESSAGE = "block w-full p-2 opacity-75";
+const STYLE_MESSAGE = "block w-full p-2 opacity-75 text-sm";
 const STYLE_ERROR = `${STYLE_MESSAGE} text-red-600`;
 
 /** @typedef {'loading' | 'loaded' | 'errored'} AutocompleteStatus */
