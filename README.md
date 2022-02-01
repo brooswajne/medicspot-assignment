@@ -224,11 +224,23 @@ This is slightly awkward - in a real production app I'd want to either:
   same server as our API routes, which could therefore also serve the app with
   HMR in a development environment.
 
-**Note**: To achieve the `Display coordinates next to results` "bonus point", I
-changed the `GET /locations` endpoint to return not just an array of string
-location names but also those locations' ids, latitudes and longitudes.  \
-This seems like a sensible change in general to support more use-cases for this
-endpoint rather than restricting ourselves to just responding with names, but
-the commit before that change (a86e9d2) can be checked out to see the
-implementation working when only returning the `name` field of the matching
-locations.
+## Spec Compliance
+
+- To achieve the `Display coordinates next to results` "bonus point", I changed
+  the `GET /locations` endpoint to return not just an array of string location
+  names but also those locations' ids, latitudes and longitudes.  \
+  This seems like a sensible change in general to support more use-cases for this
+  endpoint rather than restricting ourselves to just responding with names, but
+  the commit before that change (`a86e9d2`) can be checked out to see the
+  implementation working when only returning the `name` field of the matching
+  locations.
+
+- The server spec also says `You should only start fuzzy matches if 2 or more
+  characters are in the search string.` - I sadly skipped over this note until
+  the last minute, and while changing the endpoint to reject any search string
+  under 2 characters wouldn't be hard at all that seems like a silly way to
+  implement this, and I'm not sure what the expected behaviour would be? Respond
+  with every single location?  \
+  I would normally look to clear this up before implementing something, so sadly
+  did not have the time to do so here. No reason to make the endpoint support
+  _less_ use-cases if I don't have a good understanding of what's wanted.
