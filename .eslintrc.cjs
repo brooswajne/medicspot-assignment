@@ -27,6 +27,8 @@ module.exports = {
 		rules: {
 			// allow PascalCase.tsx, or otherwise just kebab-case as normal
 			"filename-rules/match": [ "error", /^\w+\.jsx$|^[.a-z-]+$/ ],
+			"react/react-in-jsx-scope": "off",
+			"react/prop-types": "off",
 		},
 	} ],
 
