@@ -7,7 +7,7 @@ import { GET } from "./locations.js";
 
 describe("routes/locations.js", function fileSuite( ) {
 
-	describe("parseFilter()", function functionSuite( ) {
+	describe("GET()", function handlerSuite( ) {
 
 		it("should throw a BadRequestError if no search term is provided", async function test( ) {
 			const logger = { debug: fake( ) };
