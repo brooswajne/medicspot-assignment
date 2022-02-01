@@ -34,13 +34,13 @@ const DEFAULT_LIMIT = 100;
 /**
  * Searches for locations with names matching the given ascii search string.
  *
+ * @template {keyof Location} TIncludedFields
  * @param {string} search
  * @param {object} [options]
- * @param {string[]} [options.fields]
+ * @param {Array<TIncludedFields>} [options.fields]
  * By default, all fields of the matching location rows will be returned. If
  * this argument is provided, only the location fields specified will be
  * included.
- * TODO: typescript magic to make return type match this
  * @param {number} [options.limit]
  * The maximum number of locations to include in the results.
  * @param {number} [options.offset]
@@ -49,7 +49,7 @@ const DEFAULT_LIMIT = 100;
  * The function used to execute the SQL query. Useful for stubbing in a test
  * context.
  *
- * @returns {Promise<any[]>}
+ * @returns {Promise<Pick<Location, TIncludedFields>[]>}
  */
 export async function searchLocations(search, {
 	fields = [],

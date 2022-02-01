@@ -1,10 +1,12 @@
 import { BadRequestError } from "../errors.js";
 import { searchLocations } from "../database/locations.js";
 
+/** @typedef {import("../database/locations").Location} Location */
+
 /**
  * @type {import("../routing").RequestHandler}
  * Searches for all locations matching the given name.
- * @returns {Promise<string[]>}
+ * @returns {Promise<Pick<Location, "geonameid" | "name">[]>}
  */
 export async function GET(request, { logger }, {
 	// for dependency injection
