@@ -144,7 +144,7 @@ export function Autocomplete({
 		<Listbox className="relative" as="div"
 			onChange={(option) => onOptionSelected?.(option)}
 			onFocus={( ) => setIsOpen(true)}
-			onBlur={( ) => setIsOpen(false)}>
+			onBlur={(e) => setIsOpen(e.currentTarget.contains(e.relatedTarget))}>
 			<input type="text"
 				className={STYLE_INPUT}
 				placeholder={messagePlaceholder}
