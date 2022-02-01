@@ -19,9 +19,9 @@ export async function GET(request, { logger }, {
 
 	logger.debug(`Searching for locations matching query "${search}"`);
 	const locations = await searchLocationsImpl(search, {
-		fields: [ "name" ],
+		fields: [ "geonameid", "name" ],
 		limit: Number.isInteger(limit) ? limit : undefined,
 		offset: Number.isInteger(offset) ? offset : undefined,
 	});
-	return locations.map((l) => l.name);
+	return locations;
 }

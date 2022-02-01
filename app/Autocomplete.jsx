@@ -17,11 +17,12 @@ const STYLE_OPTION = "p-2 rounded"
  * @template TOption
  * @param {object} props
  * @param {TOption} props.option
+ * @param {string} props.name
  */
-function AutocompleteOption({ option }) {
+function AutocompleteOption({ option, name }) {
 	return (
 		<Listbox.Option value={option} className={STYLE_OPTION}>
-			{option}
+			{name}
 		</Listbox.Option>
 	);
 }
@@ -58,16 +59,21 @@ const STYLE_ERROR = `${STYLE_MESSAGE} text-red-600`;
  * A function which is called when the user enters a search query, and
  * should resolve to the options which should be displayed to the user
  * for that query.
- * @param {string} [props.messagePlaceholder]
+ * @param {string} props.messagePlaceholder
  * The text input's placeholder text.
- * @param {string} [props.messageLoading]
+ * @param {string} props.messageLoading
  * The message to be shown to the user while the options are loading.
- * @param {string} [props.messageErrored]
+ * @param {string} props.messageErrored
  * The message to be shown to the user when the options have failed to
  * load.
- * @param {string} [props.messageEmpty]
+ * @param {string} props.messageEmpty
  * The message to be shown to the user when the options loaded successfully
  * but none were found matching their query.
+ * @param {(option: TOption) => string} props.getOptionId
+ * Given a single option, returns its unique ID to identify it within the
+ * autocomplete dropdown.
+ * @param {(option: TOption) => string} props.getOptionName
+ * Given a single option, returns its name to be displayed to the user.
  */
 export function Autocomplete({
 	loadOptions,
@@ -75,6 +81,8 @@ export function Autocomplete({
 	messageErrored,
 	messageLoading,
 	messagePlaceholder,
+	getOptionId,
+	getOptionName,
 }) {
 	const [ isOpen, setIsOpen ] = useState(false);
 	const [ status, setStatus ] = useState(/** @type {AutocompleteStatus} */ ("loading"));
@@ -108,7 +116,10 @@ export function Autocomplete({
 	function AutocompleteContents( ) {
 		switch (status) {
 		case "loaded": return options.length
-			? options.map((option) => (<AutocompleteOption key={option} option={option} />))
+			? options.map((option) => (<AutocompleteOption option={option}
+				key={getOptionId(option)}
+				name={getOptionName(option)}>
+			</AutocompleteOption>))
 			: <span className={STYLE_MESSAGE}>{messageEmpty}</span>;
 		case "loading": return (<span className={STYLE_MESSAGE}>{messageLoading}</span>);
 		case "errored": return (<span className={STYLE_ERROR}>{messageErrored}</span>);

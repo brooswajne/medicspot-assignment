@@ -7,9 +7,16 @@ const STYLE_CONTAINER = "max-w-md mx-auto"
 	+ " p-6 rounded"; // shape
 const STYLE_HEADING = "text-xl text-slate-800 font-bold mb-3";
 
-/** @type {import("./Autocomplete").LoadOptionsFn} */
+/**
+ * @typedef {object} LocationOption
+ * @property {string} geonameid
+ * @property {string} name
+ */
+
+/** @type {import("./Autocomplete").LoadOptionsFn<LocationOption>} */
 async function loadOptions(searchTerm, { signal }) {
 	return fetch(`/locations?q=${searchTerm}`, { signal })
+		// TODO: should really validate that the JSON is actually Array<LocationOption>
 		.then((res) => res.json( ));
 }
 
@@ -22,6 +29,8 @@ export function App( ) {
 				messageLoading="Searching..."
 				messageErrored="Failed to load locations"
 				messageEmpty="No matching locations found."
+				getOptionId={(location) => location.geonameid}
+				getOptionName={(location) => location.name}
 			/>
 		</main>
 	);

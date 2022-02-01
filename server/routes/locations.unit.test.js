@@ -18,12 +18,13 @@ describe("routes/locations.js", function fileSuite( ) {
 				.to.be.rejectedWith(BadRequestError);
 		});
 
-		it("should return just the names of matching locations", async function test( ) {
+		it("should return the matching locations", async function test( ) {
 			const logger = { debug: fake( ) };
-			const searchLocationsImpl = fake.resolves([
-				{ name: "location one" },
-				{ name: "location two" },
-			]);
+			const locations = [
+				{ geonameid: 3141, name: "location one" },
+				{ geonameid: 2718, name: "location two" },
+			];
+			const searchLocationsImpl = fake.resolves(locations);
 
 			// @ts-expect-error -- not a real request object
 			const returned = await GET({
@@ -31,14 +32,11 @@ describe("routes/locations.js", function fileSuite( ) {
 			}, { logger }, { searchLocationsImpl });
 
 			expect(searchLocationsImpl).to.have.been.calledOnceWithExactly("search term", {
-				fields: [ "name" ],
+				fields: [ "geonameid", "name" ],
 				limit: undefined,
 				offset: undefined,
 			});
-			expect(returned).to.deep.equal([
-				"location one",
-				"location two",
-			]);
+			expect(returned).to.deep.equal(locations);
 		});
 
 		it("should pass limit/offset query params to the locations search", async function test( ) {
@@ -53,7 +51,7 @@ describe("routes/locations.js", function fileSuite( ) {
 			} }, { logger }, { searchLocationsImpl });
 
 			expect(searchLocationsImpl).to.have.been.calledOnceWithExactly("search term", {
-				fields: [ "name" ],
+				fields: [ "geonameid", "name" ],
 				limit: 322,
 				offset: 15,
 			});
@@ -71,7 +69,7 @@ describe("routes/locations.js", function fileSuite( ) {
 			} }, { logger }, { searchLocationsImpl });
 
 			expect(searchLocationsImpl).to.have.been.calledOnceWithExactly("search term", {
-				fields: [ "name" ],
+				fields: [ "geonameid", "name" ],
 				limit: undefined,
 				offset: undefined,
 			});

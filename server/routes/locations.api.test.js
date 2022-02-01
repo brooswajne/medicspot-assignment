@@ -7,6 +7,19 @@ import {
 import { api } from "../../test/api/application.js";
 import { generateLocation } from "../../test/generators.js";
 
+/**
+ * @template {object} TSource
+ * @param {TSource} object
+ * @param {(keyof TSource)[]} keys
+ * @returns {Partial<TSource>}
+ */
+const pick = (object, ...keys) => {
+	/** @type {Partial<TSource>} */
+	const picked = { };
+	for (const key of keys) if (key in object) picked[ key ] = object[ key ];
+	return picked;
+};
+
 describe("GET /locations", function endpointSuite( ) {
 
 	it("should 400 if no search term is provided", async function test( ) {
@@ -14,14 +27,17 @@ describe("GET /locations", function endpointSuite( ) {
 			.expect(400);
 	});
 
-	it("should respond with all matching locations", async function test( ) {
+	it("should respond with the wanted fields for all matching locations", async function test( ) {
 		await clearLocations( );
+
+		const matchingOne = generateLocation({ name: "needle one" });
+		const matchingTwo = generateLocation({ name: "needle two" });
 		await seedLocations([
 			generateLocation({ name: "hay" }),
 			generateLocation({ name: "hey" }),
-			generateLocation({ name: "needle one" }),
+			matchingOne,
 			generateLocation({ name: "heyoo" }),
-			generateLocation({ name: "needle two" }),
+			matchingTwo,
 			generateLocation({ name: "hay with needle but not at the start" }),
 		]);
 
@@ -29,9 +45,9 @@ describe("GET /locations", function endpointSuite( ) {
 			.query({ q: "needle" })
 			.expect(200);
 
-		expect(body).to.have.members([
-			"needle one",
-			"needle two",
+		expect(body).to.have.deep.members([
+			pick(matchingOne, "geonameid", "name"),
+			pick(matchingTwo, "geonameid", "name"),
 		]);
 	});
 
@@ -51,7 +67,7 @@ describe("GET /locations", function endpointSuite( ) {
 			.expect(200);
 		expect(responseTwo).to.have.lengthOf(10);
 		// if offset has been respected, we overlap on the last entry
-		expect(responseTwo[ 0 ]).to.equal(responseOne[ 4 ]);
+		expect(responseTwo[ 0 ]).to.deep.equal(responseOne[ 4 ]);
 	});
 
 	it("should sort matches in a relevant order", async function test( ) {
@@ -70,7 +86,7 @@ describe("GET /locations", function endpointSuite( ) {
 
 		// currently, we just classify something as a "good match" if it doesn't
 		// have many "extra" characters after the search string
-		expect(body).to.deep.equal([
+		expect(body.map((/** @type {{ name: string }} */ l) => l.name)).to.deep.equal([
 			"good match",
 			"good match (but less)",
 			"good match (but lesser)",
