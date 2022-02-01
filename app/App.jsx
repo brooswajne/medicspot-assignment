@@ -7,11 +7,22 @@ const STYLE_CONTAINER = "max-w-md mx-auto"
 	+ " p-6 rounded"; // shape
 const STYLE_HEADING = "text-xl text-slate-800 font-bold mb-3";
 
+/** @type {import("./Autocomplete").LoadOptionsFn} */
+async function loadOptions(searchTerm, { signal }) {
+	return fetch(`/locations?q=${searchTerm}`, { signal })
+		.then((res) => res.json( ));
+}
+
 export function App( ) {
 	return (
 		<main className={STYLE_CONTAINER}>
 			<h1 className={STYLE_HEADING}>Medicspot Geolocation Search</h1>
-			<Autocomplete placeholder="Search for a location" />
+			<Autocomplete loadOptions={loadOptions}
+				messagePlaceholder="Search for a location"
+				messageLoading="Searching..."
+				messageErrored="Failed to load locations"
+				messageEmpty="No matching locations found."
+			/>
 		</main>
 	);
 }

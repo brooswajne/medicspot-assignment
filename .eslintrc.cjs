@@ -25,7 +25,7 @@ module.exports = {
 		parserOptions: { ecmaFeatures: { jsx: true } },
 		extends: [ "@brooswajne", "plugin:react/recommended" ],
 		rules: {
-			// allow PascalCase.tsx, or otherwise just kebab-case as normal
+			// allow PascalCase for components, or otherwise just kebab-case as normal
 			"filename-rules/match": [ "error", /^\w+\.jsx$|^[.a-z-]+$/ ],
 			"react/react-in-jsx-scope": "off",
 			"react/prop-types": "off",
