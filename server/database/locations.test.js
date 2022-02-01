@@ -1,6 +1,8 @@
 import { expect } from "chai";
 import { fake } from "sinon";
 
+import { DB_TABLE_LOCATIONS } from "../config.js";
+
 import { searchLocations } from "./locations.js";
 
 /** @param {string} str */
@@ -22,7 +24,7 @@ describe("server/database/locations.js", function fileSuite( ) {
 			const [ query ] = execute.getCall(0).args;
 			expect(normalizeWhitespace(query.sql))
 				.to.equal(normalizeWhitespace(`
-				SELECT * FROM locations
+				SELECT * FROM ${DB_TABLE_LOCATIONS}
 				WHERE asciiname LIKE ?
 				ORDER BY length(name) ASC,
                  name ASC
@@ -48,7 +50,7 @@ describe("server/database/locations.js", function fileSuite( ) {
 			expect(normalizeWhitespace(query.sql))
 				.to.equal(normalizeWhitespace(`
 				SELECT "field one", "field two"
-				FROM locations
+				FROM ${DB_TABLE_LOCATIONS}
 				WHERE asciiname LIKE ?
 				ORDER BY length(name) ASC,
 				         name ASC
